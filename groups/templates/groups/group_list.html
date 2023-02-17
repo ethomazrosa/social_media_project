@@ -27,15 +27,16 @@
     <div class="col-md-8">
         <div class="list-group">
             {% for group in object_list %}
+                <!-- <br> -->
                 <a href="{% url 'groups:single' slug=group.slug %}"
                     class="list-group-item list-group-item-action flex-column align-items-start">
                     <h3 class="mb-1">{{ group.name }}</h3>
                     <p class="mb-1">{{ group.description_html|safe }}</p>
 
                     <div class="d-flex w-40 justify-content-between">
-                        <small class="text-muted"><span class="badge badge-secondary">
+                        <small class="text-muted"><span class="badge rounded-pill text-bg-secondary">
                             {{ group.members.count }}</span> member{{ group.members.count|pluralize }}</small>
-                        <small class="text-muted"><span class="badge badge-secondary">
+                        <small class="text-muted"><span class="badge rounded-pill text-bg-secondary">
                             {{ group.posts.count }}</span> post{{ group.posts.count|pluralize }}</small>
                     </div>
                 </a>

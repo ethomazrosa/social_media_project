@@ -8,16 +8,25 @@ from django.views.generic import (ListView, DetailView,
                                   CreateView, DeleteView)
 from braces.views import SelectRelatedMixin
 from . import models
-from . import forms
+from groups.models import Group
 
 User = get_user_model()
 
 # Views
 
+
 class PostList(SelectRelatedMixin, ListView):
     model = models.Post
     select_related = ('user', 'group')
 
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+        context['user_groups'] = Group.objects.filter(
+            members__in=[self.request.user])
+        context['all_groups'] = Group.objects.all()
+
+        return context
 
 class UserPosts(ListView):
     model = models.Post
@@ -44,7 +53,7 @@ class PostDetail(SelectRelatedMixin, DetailView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset.filter(user__username__iexact=self.kwargs.get('username'))
+        return queryset.filter(user__username__iexact=self.kwargs.get('username'))
     
 
 class CreatePost(LoginRequiredMixin, SelectRelatedMixin, CreateView):
